@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- PART 2/4 (CSS) WILL GO INSIDE THIS STYLE TAG -->
+  <style>
+  /* PART 2/4: CSS WILL BE PASTED HERE */
+  </style>
+</head>
+<body>
+
+  <!-- ========================= LOGIN SCREEN ========================= -->
+  <div id="login-screen">
+    <div class="login-container">
+      <form class="login-form" onsubmit="return false;">
+        <p>Welcome</p>
+        <input id="login-username" type="text" placeholder="Username"><br>
+        <input id="login-password" type="password" placeholder="Password"><br>
+        <input type="button" value="Sign in" onclick="handleLogin()"><br>
+      </form>
+
+      <div class="drops">
+        <div class="drop drop-1"></div>
+        <div class="drop drop-2"></div>
+        <div class="drop drop-3"></div>
+        <div class="drop drop-4"></div>
+        <div class="drop drop-5"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================= APP WRAPPER ========================= -->
+  <div id="app" class="hidden">
+    <div class="app-container">
+
+      <!-- ========================= SIDEBAR ========================= -->
+      <aside class="sidebar">
+        <div class="logo">
+          <i class="fab fa-apple"></i>
+        </div>
+
+        <nav class="menu">
+          <ul>
+            <li class="active" data-page="home">
+              <a href="javascript:void(0);">
+                <i class="fas fa-home"></i><span>Home</span>
+              </a>
+            </li>
+
+            <li data-page="creds">
+              <a href="javascript:void(0);">
+                <i class="fas fa-key"></i><span>Daily Credentials</span>
+              </a>
+            </li>
+
+            <li data-page="history">
+              <a href="javascript:void(0);">
+                <i class="fas fa-clock-rotate-left"></i><span>History</span>
+              </a>
+            </li>
+
+            <!-- Admin-only items -->
+            <li class="admin-only" data-page="users">
+              <a href="javascript:void(0);">
+                <i class="fas fa-users-cog"></i><span>Manage Users</span>
+              </a>
+            </li>
+
+            <li class="admin-only" data-page="logs">
+              <a href="javascript:void(0);">
+                <i class="fas fa-list"></i><span>Login Logs</span>
+              </a>
+            </li>
+
+            <li class="admin-only" data-page="prompts">
+              <a href="javascript:void(0);">
+                <i class="fas fa-folder-tree"></i><span>Prompts</span>
+              </a>
+            </li>
+
+            <!-- User-visible My Prompts (above Logout) -->
+            <li data-page="my-prompts">
+              <a href="javascript:void(0);">
+                <i class="fas fa-note-sticky"></i><span>My Prompts</span>
+              </a>
+            </li>
+
+            <!-- Logout -->
+            <li>
+              <a href="javascript:void(0);" onclick="logout();">
+                <i class="fas fa-right-from-bracket"></i><span>Logout</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="profile">
+          <div class="avatar">
+            <img
+              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80"
+              alt="Profile">
+          </div>
+          <div class="user-info">
+            <h3 id="profile-name">User</h3>
+            <p id="profile-role">Role</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ========================= MAIN CONTENT ========================= -->
+      <main class="content">
+        <header id="main-header">
+          <h1>Welcome back, <span id="welcome-name">User</span></h1>
+          <p>Here’s an overview of your account and system activity.</p>
+        </header>
+
+        <!-- ========== HOME PAGE ========== -->
+        <section id="page-home" class="page active">
+          <div class="card-container">
+            <div class="card">
+              <div class="card-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="card-info">
+                <h3 id="card-total-users">0</h3>
+                <p>Total Users</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="card-info">
+                <h3 id="card-last-login">-</h3>
+                <p>Last Login</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon">
+                <i class="fas fa-key"></i>
+              </div>
+              <div class="card-info">
+                <h3 id="card-today-creds">-</h3>
+                <p>Today’s Credentials</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon">
+                <i class="fas fa-list"></i>
+              </div>
+              <div class="card-info">
+                <h3 id="card-log-count">0</h3>
+                <p>Login Logs Count</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== DAILY CREDENTIALS PAGE ========== -->
+        <section id="page-creds" class="page">
+          <h2>Today’s Credentials</h2>
+          <p style="opacity:0.8;font-size:0.95rem;">
+            These rotate daily and are stored locally in your browser.
+          </p>
+
+          <div class="card" style="margin-top:20px;max-width:420px;">
+            <div class="card-icon">
+              <i class="fas fa-user-lock"></i>
+            </div>
+            <div class="card-info">
+              <h3 id="today-username">-</h3>
+              <p>Username</p>
+              <h3 id="today-password" style="margin-top:10px;">-</h3>
+              <p>Password</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== HISTORY PAGE ========== -->
+        <section id="page-history" class="page">
+          <h2>Past Daily Credentials</h2>
+          <p style="opacity:0.8;font-size:0.95rem;">
+            History of generated daily usernames and passwords.
+          </p>
+          <div class="table-wrapper">
+            <ul id="history-list"></ul>
+          </div>
+        </section>
+
+        <!-- ========== MANAGE USERS PAGE (ADMIN ONLY) ========== -->
+        <section id="page-users" class="page">
+          <h2>Manage Users</h2>
+          <form onsubmit="event.preventDefault(); addUser();">
+            <input id="new-username" placeholder="Username">
+            <input id="new-password" placeholder="Password">
+            <input id="new-displayname" placeholder="Display Name">
+            <input id="new-role" placeholder="Role">
+            <button type="submit">Add User</button>
+          </form>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Display Name</th>
+                  <th>Role</th>
+                  <th>Password</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ========== LOGIN LOGS PAGE (ADMIN ONLY) ========== -->
+        <section id="page-logs" class="page">
+          <h2>Login Logs</h2>
+          <p style="opacity:0.8;font-size:0.95rem;">
+            Stored locally: username, display name, time, browser, OS, device.
+          </p>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Display Name</th>
+                  <th>Date & Time</th>
+                  <th>Browser</th>
+                  <th>OS</th>
+                  <th>Device</th>
+                </tr>
+              </thead>
+              <tbody id="logs-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ========== PROMPTS PAGE (ADMIN) ========== -->
+        <section id="page-prompts" class="page">
+          <h2>Prompts (Admin)</h2>
+          <p style="opacity:0.8;font-size:0.95rem;">
+            Create sections and sub‑sections of prompts for each user.
+          </p>
+
+          <div class="prompts-admin-controls">
+            <label for="prompt-user-select">Select User:</label>
+            <select id="prompt-user-select"></select>
+            <button type="button" onclick="addPromptSection()">Add Section</button>
+          </div>
+
+          <div id="prompt-sections" class="prompt-sections-container">
+            <!-- Sections + mini‑cards will be rendered here -->
+          </div>
+        </section>
+
+        <!-- ========== MY PROMPTS PAGE (USER VIEW) ========== -->
+        <section id="page-my-prompts" class="page">
+          <h2>My Prompts</h2>
+          <p style="opacity:0.8;font-size:0.95rem;">
+            These are your personal sections and sub‑sections, managed by the admin.
+          </p>
+
+          <div id="my-prompts-container" class="prompt-sections-container">
+            <!-- User’s own sections + mini‑cards will be rendered here -->
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- PART 3/4 + 4/4 (JAVASCRIPT) WILL GO INSIDE THIS SCRIPT TAG -->
+  <script>
+  // PART 3/4 & 4/4: JAVASCRIPT WILL BE PASTED HERE
+  </script>
+</body>
+</html>
